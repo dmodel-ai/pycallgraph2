@@ -7,13 +7,15 @@ from .exceptions import PyCallGraphException
 
 
 class PyCallGraph(object):
-    def __init__(self, output=None, config=None):
+    def __init__(self, output=None, config=None, target_filename=None):
         """output can be a single Output instance or an iterable with many
         of them.  Example usage:
 
             PyCallGraph(output=GraphvizOutput(), config=Config())
         """
         locale.setlocale(locale.LC_ALL, '')
+        assert target_filename is not None
+        self.target_filename = target_filename
 
         if output is None:
             self.output = []
@@ -46,7 +48,8 @@ class PyCallGraph(object):
         """Resets all collected statistics.  This is run automatically by
         start(reset=True) and when the class is initialized.
         """
-        self.tracer = self.get_tracer_class()(self.output, config=self.config)
+        self.tracer = self.get_tracer_class()(self.output, config=self.config,
+                                              target_filename=self.target_filename)
 
         for output in self.output:
             self.prepare_output(output)

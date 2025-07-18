@@ -22,5 +22,5 @@ globals()['__file__'] = __config.command
 
 __file_content = open(__config.command).read()
 
-with __pycallgraph.PyCallGraph(config=__config):
+with __pycallgraph.PyCallGraph(config=__config,target_filename=__config.command):
     exec(__file_content)

@@ -17,8 +17,9 @@ from .util import Util
 
 class SynchronousTracer(object):
 
-    def __init__(self, outputs, config):
-        self.processor = TraceProcessor(outputs, config)
+    def __init__(self, outputs, config, target_filename):
+        assert target_filename is not None
+        self.processor = TraceProcessor(outputs, config, target_filename)
         self.config = config
 
     def tracer(self, frame, event, arg):
@@ -61,13 +62,14 @@ class TraceProcessor(Thread):
     function call count, time taken, etc.
     """
 
-    def __init__(self, outputs, config):
+    def __init__(self, outputs, config, target_filename):
         Thread.__init__(self)
         self.trace_queue = Queue()
         self.keep_going = True
         self.outputs = outputs
         self.config = config
         self.updatables = [a for a in self.outputs if a.should_update()]
+        self.target_filename = target_filename
 
         self.init_trace_data()
         self.init_libpath()
