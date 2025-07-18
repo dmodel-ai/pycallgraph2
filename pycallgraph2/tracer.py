@@ -167,27 +167,17 @@ class TraceProcessor(Thread):
             # Work out the module name
             module = inspect.getmodule(code)
             if module:
-                module_name = module.__name__
                 module_path = module.__file__
 
                 if not self.config.include_stdlib \
                         and self.is_module_stdlib(module_path):
                     keep = False
 
-                if module_name == '__main__':
-                    module_name = ''
+            if frame.f_code.co_filename == "<string>":
+                full_name_list.append(self.target_filename)
             else:
-                module_name = ''
-
-            if module_name:
-                full_name_list.append(module_name)
-
-            # Work out the class name
-            try:
-                class_name = frame.f_locals['self'].__class__.__name__
-                full_name_list.append(class_name)
-            except (KeyError, AttributeError):
-                pass
+                full_name_list.append(frame.f_code.co_filename)
+            full_name_list.append(str(frame.f_lineno))
 
             # Work out the current function or method
             func_name = code.co_name
@@ -196,7 +186,7 @@ class TraceProcessor(Thread):
             full_name_list.append(func_name)
 
             # Create a readable representation of the current call
-            full_name = '.'.join(full_name_list)
+            full_name = ':'.join(full_name_list)
 
             if len(self.call_stack) > self.config.max_depth:
                 keep = False
