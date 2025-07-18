@@ -166,6 +166,12 @@ class TraceProcessor(Thread):
 
             # Work out the module name
             module = inspect.getmodule(code)
+            if not self.config.include_stdlib and \
+               "frozen" in frame.f_code.co_filename:
+                keep = False
+            if not self.config.include_pycallgraph and \
+               "pycallgraph2" in frame.f_code.co_filename:
+                keep = False
             if module:
                 module_path = module.__file__
 
