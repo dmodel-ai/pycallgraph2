@@ -272,7 +272,8 @@ class TraceProcessor(Thread):
         Returns True if the file_name is in the lib directory. Used to check
         if a function is in the standard library or not.
         """
-        return file_name.lower().startswith(self.lib_path)
+        return file_name.lower().startswith(self.lib_path) or\
+            "lib/python" in file_name.lower()
 
     def __getstate__(self):
         """Used for when creating a pickle. Certain instance variables can't
