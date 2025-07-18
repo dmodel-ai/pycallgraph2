@@ -77,7 +77,7 @@ class Config(object):
             self.include = ['*']
 
         if not self.include_pycallgraph:
-            self.exclude.append('pycallgraph.*')
+            self.exclude.append('pycallgraph2.*')
 
         self.trace_filter = GlobbingFilter(
             include=self.include,
