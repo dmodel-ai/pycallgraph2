@@ -39,7 +39,6 @@ setup(
     packages=['pycallgraph2', 'pycallgraph2.output'],
     scripts=['scripts/pycallgraph'],
     data_files=data_files,
-    use_2to3=True,
 
     # Testing
     tests_require=['pytest'],
